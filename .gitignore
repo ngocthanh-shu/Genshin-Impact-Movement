@@ -1,0 +1,9 @@
+﻿.idea
+Library
+Logs
+obj
+Temp
+*.csproj
+*.sln
+UserSettings
+Genshin Impact Movement.sln.DotSettings.user

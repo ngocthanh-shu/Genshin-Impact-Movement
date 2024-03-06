@@ -14,17 +14,18 @@ namespace GenshinImpactMovementSystem
         private bool _shouldResetSprintState;
         public PlayerSprintingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _playerSprintData = _playerGroundedData.SprintData;
+            _playerSprintData = playerGroundedData.SprintData;
         }
         
         #region IState Methods
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerSprintData.SpeedModifier;
+            
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerSprintData.SpeedModifier;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.StrongForce;
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StrongForce;
             
             _shouldResetSprintState = true;
             
@@ -46,7 +47,7 @@ namespace GenshinImpactMovementSystem
             if (_shouldResetSprintState)
             {
                 _keepSprinting = false;
-                _playerMovementStateMachine.ReusableData.ShouldSprint = false;
+                playerMovementStateMachine.ReusableData.ShouldSprint = false;
             }
         }
 
@@ -56,12 +57,12 @@ namespace GenshinImpactMovementSystem
         
         private void StopSprinting()
         {
-            if(_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
+            if(playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.IdlingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.IdlingState);
                 return;
             }
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.RunningState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.RunningState);
         }
         
         #endregion
@@ -78,13 +79,13 @@ namespace GenshinImpactMovementSystem
         protected override void AddInputActionCallbacks()
         {
             base.AddInputActionCallbacks();
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Sprint.performed += OnSprintPerformed;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Sprint.performed += OnSprintPerformed;
         }
         
         protected override void RemoveInputActionCallbacks()
         {
             base.RemoveInputActionCallbacks();
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Sprint.performed -= OnSprintPerformed;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Sprint.performed -= OnSprintPerformed;
         }
 
         #endregion
@@ -93,7 +94,9 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.HardStoppingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.HardStoppingState);
+            
+            base.OnMovementCanceled(context);
         }
 
         protected override void OnJumpStarted(InputAction.CallbackContext obj)
@@ -106,7 +109,7 @@ namespace GenshinImpactMovementSystem
         {
             _keepSprinting = true;
             
-            _playerMovementStateMachine.ReusableData.ShouldSprint = true;
+            playerMovementStateMachine.ReusableData.ShouldSprint = true;
         }
         
         #endregion

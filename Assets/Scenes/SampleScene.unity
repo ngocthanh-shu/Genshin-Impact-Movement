@@ -1753,6 +1753,10 @@ MonoBehaviour:
     <GroundLayerMask>k__BackingField:
       serializedVersion: 2
       m_Bits: 64
+  <CameraUtility>k__BackingField:
+    <VirtualCamera>k__BackingField: {fileID: 217312620}
+    <DefaultHorizontalWaitTime>k__BackingField: 0
+    <DefaultHorizontalRecenteringTime>k__BackingField: 4
 --- !u!4 &542047207
 Transform:
   m_ObjectHideFlags: 0
@@ -2018,8 +2022,8 @@ MonoBehaviour:
       m_LegacyVelocityFilterStrength: -1
   m_HorizontalRecentering:
     m_enabled: 0
-    m_WaitTime: 1
-    m_RecenteringTime: 2
+    m_WaitTime: 0
+    m_RecenteringTime: 4
     m_LegacyHeadingDefinition: -1
     m_LegacyVelocityFilterStrength: -1
   m_ApplyBeforeBody: 0

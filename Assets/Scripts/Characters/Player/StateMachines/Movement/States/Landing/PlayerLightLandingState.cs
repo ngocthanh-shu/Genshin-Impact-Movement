@@ -14,11 +14,11 @@ namespace GenshinImpactMovementSystem
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
+            
             base.Enter();
-            
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
-            
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.StationaryForce;
+
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StationaryForce;
             
             ResetVelocity();
         }
@@ -27,14 +27,14 @@ namespace GenshinImpactMovementSystem
         {
             base.Update();
             
-            if(_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero) return;
+            if(playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero) return;
             
             OnMove();
         }
 
         public override void OnAnimationTransitionEvent()
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.IdlingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.IdlingState);
         }
 
         #endregion

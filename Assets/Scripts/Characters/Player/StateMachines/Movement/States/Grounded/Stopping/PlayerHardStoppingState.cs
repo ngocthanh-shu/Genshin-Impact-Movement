@@ -16,8 +16,8 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementDecelerationForce = _playerGroundedData.StopData.HardDecelerationForce;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.StrongForce;
+            playerMovementStateMachine.ReusableData.MovementDecelerationForce = playerGroundedData.StopData.HardDecelerationForce;
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StrongForce;
         }
 
         #endregion
@@ -26,8 +26,8 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnMove()
         {
-            if(_playerMovementStateMachine.ReusableData.ShouldWalk) return;
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.RunningState);
+            if(playerMovementStateMachine.ReusableData.ShouldWalk) return;
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.RunningState);
         }
 
         #endregion

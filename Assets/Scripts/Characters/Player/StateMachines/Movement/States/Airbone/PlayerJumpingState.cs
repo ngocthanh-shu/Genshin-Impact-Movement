@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace GenshinImpactMovementSystem
 {
@@ -13,7 +14,7 @@ namespace GenshinImpactMovementSystem
         
         public PlayerJumpingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _jumpData = _playerAirborneData.JumpData;
+            _jumpData = playerAirborneData.JumpData;
         }
 
 
@@ -23,9 +24,9 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
 
-            _playerMovementStateMachine.ReusableData.MovementDecelerationForce = _jumpData.DecelerationForce;
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
-            _shouldKeepRotating = _playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
+            playerMovementStateMachine.ReusableData.MovementDecelerationForce = _jumpData.DecelerationForce;
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
+            _shouldKeepRotating = playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
             
             Jump();
         }
@@ -40,7 +41,7 @@ namespace GenshinImpactMovementSystem
             }
             
             if(!_canStartFalling || GetPlayerVerticalVelocity().y > 0f) return;
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.FallingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.FallingState);
         }
 
         public override void PhysicsUpdate()
@@ -73,20 +74,20 @@ namespace GenshinImpactMovementSystem
 
         private void Jump()
         {
-            Vector3 jumpForce = _playerMovementStateMachine.ReusableData.CurrentJumpForce;
+            Vector3 jumpForce = playerMovementStateMachine.ReusableData.CurrentJumpForce;
             
-            Vector3 jumpDirection = _playerMovementStateMachine.Player.transform.forward;
+            Vector3 jumpDirection = playerMovementStateMachine.Player.transform.forward;
 
             if (_shouldKeepRotating)
             {
                 jumpDirection =
-                    GetTargetRotationDirection(_playerMovementStateMachine.ReusableData.CurrentTargetRotation.y);
+                    GetTargetRotationDirection(playerMovementStateMachine.ReusableData.CurrentTargetRotation.y);
             }
             
             jumpForce.x *= jumpDirection.x;
             jumpForce.z *= jumpDirection.z;
 
-            Vector3 capsuleColliderCenterInWorldSpace = _playerMovementStateMachine.Player.CapsuleColliderUtility
+            Vector3 capsuleColliderCenterInWorldSpace = playerMovementStateMachine.Player.CapsuleColliderUtility
                 .CapsuleColliderData.Collider.bounds.center;
             
             Ray downwardRayFromCapsuleCenter = new Ray(capsuleColliderCenterInWorldSpace, Vector3.down);
@@ -94,7 +95,7 @@ namespace GenshinImpactMovementSystem
             if (Physics.Raycast(downwardRayFromCapsuleCenter, 
                     out RaycastHit hit, 
                     _jumpData.JumpToGroundRayDistance, 
-                    _playerMovementStateMachine.Player.LayerData.GroundLayerMask, 
+                    playerMovementStateMachine.Player.LayerData.GroundLayerMask, 
                     QueryTriggerInteraction.Ignore))
             {
                 float groundAngle = Vector3.Angle(hit.normal, -downwardRayFromCapsuleCenter.direction);
@@ -117,7 +118,7 @@ namespace GenshinImpactMovementSystem
 
             ResetVelocity();
             
-            _playerMovementStateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
+            playerMovementStateMachine.Player.Rigidbody.AddForce(jumpForce, ForceMode.VelocityChange);
         }
 
         #endregion
@@ -127,6 +128,14 @@ namespace GenshinImpactMovementSystem
         protected override void ResetSprintState()
         {
             
+        }
+
+        #endregion
+
+        #region Input Methods
+
+        protected override void OnMovementCanceled(InputAction.CallbackContext context)
+        {
         }
 
         #endregion

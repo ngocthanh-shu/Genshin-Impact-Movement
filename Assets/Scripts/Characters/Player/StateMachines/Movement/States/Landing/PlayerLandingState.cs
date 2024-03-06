@@ -11,14 +11,5 @@ namespace GenshinImpactMovementSystem
         {
         }
 
-        #region Input Methods
-
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            
-        }
-
-        #endregion
-        
     }
 }

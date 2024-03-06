@@ -7,18 +7,24 @@ namespace GenshinImpactMovementSystem
 {
     public class PlayerIdlingState : PlayerGroundedState
     {
+        private PlayerIdleData _playerIdleData;
+        
         public PlayerIdlingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
+            _playerIdleData = playerGroundedData.IdleData;
         }
 
         #region IState Method
 
         public override void Enter()
         {
-            base.Enter();
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
             
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.StationaryForce;
+            playerMovementStateMachine.ReusableData.BackwardsCameraRecenteringData = _playerIdleData.BackwardsCameraRecenteringData;
+            
+            base.Enter();
+
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StationaryForce;
             
             ResetVelocity();
         }
@@ -26,7 +32,7 @@ namespace GenshinImpactMovementSystem
         public override void Update()
         {
             base.Update();
-            if(_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero) return;
+            if(playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero) return;
             OnMove();
         }
 

@@ -18,7 +18,7 @@ namespace GenshinImpactMovementSystem
         
         public PlayerDashingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _playerDashData = _playerGroundedData.DashData;
+            _playerDashData = playerGroundedData.DashData;
         }
 
         public override void Update()
@@ -33,11 +33,11 @@ namespace GenshinImpactMovementSystem
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerDashData.SpeedModifier;
             base.Enter();
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerDashData.SpeedModifier;
-            _playerMovementStateMachine.ReusableData.RotationData = _playerDashData.RotationData;
+            playerMovementStateMachine.ReusableData.RotationData = _playerDashData.RotationData;
             AddForceOnTransitionFromStationaryState();
-            _shouldKeepRotating = _playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
+            _shouldKeepRotating = playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
             UpdateConsecutiveDashes();
             _startDashTime = Time.time;
         }
@@ -57,13 +57,13 @@ namespace GenshinImpactMovementSystem
 
         public override void OnAnimationTransitionEvent()
         {
-            if (_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.HardStoppingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.HardStoppingState);
                 
                 return;
             }
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.SprintingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.SprintingState);
         }
 
         #endregion
@@ -72,11 +72,11 @@ namespace GenshinImpactMovementSystem
         
         private void AddForceOnTransitionFromStationaryState()
         {
-            if(_playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero) return;
-            Vector3 characterRotationDirection = _playerMovementStateMachine.Player.transform.forward;
+            if(playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero) return;
+            Vector3 characterRotationDirection = playerMovementStateMachine.Player.transform.forward;
             characterRotationDirection.y = 0f;
             UpdateTargetRotation(characterRotationDirection, false);
-            _playerMovementStateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
+            playerMovementStateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
         }
         
         private void UpdateConsecutiveDashes()
@@ -88,11 +88,11 @@ namespace GenshinImpactMovementSystem
 
             ++_consecutiveDashesUsed;
 
-            if (_consecutiveDashesUsed == _playerGroundedData.DashData.ConsecutiveDashesLimitAmount)
+            if (_consecutiveDashesUsed == playerGroundedData.DashData.ConsecutiveDashesLimitAmount)
             {
                 _consecutiveDashesUsed = 0;
-                _playerMovementStateMachine.Player.PlayerInput.DisableActionFor(
-                    _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Dash,
+                playerMovementStateMachine.Player.PlayerInput.DisableActionFor(
+                    playerMovementStateMachine.Player.PlayerInput.PlayerActions.Dash,
                     _playerDashData.DashLimitReachCooldown);
                 
             }
@@ -113,23 +113,18 @@ namespace GenshinImpactMovementSystem
         {
             base.AddInputActionCallbacks();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.performed += OnMovementPerformed;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.performed += OnMovementPerformed;
         }
 
         protected override void RemoveInputActionCallbacks()
         {
             base.RemoveInputActionCallbacks();
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.performed -= OnMovementPerformed;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.performed -= OnMovementPerformed;
         }
         
         #endregion
 
         #region Input Methods
-
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-            
-        }
         
         private void OnMovementPerformed(InputAction.CallbackContext obj)
         {

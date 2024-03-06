@@ -10,25 +10,25 @@ namespace GenshinImpactMovementSystem
         private PlayerRollData _playerRollData;
         public PlayerRollingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _playerRollData = _playerGroundedData.RollData;
+            _playerRollData = playerGroundedData.RollData;
         }
 
         #region IState Methods
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerRollData.SpeedModifier;
+            
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerRollData.SpeedModifier;
-            
-            _playerMovementStateMachine.ReusableData.ShouldSprint = false;
+            playerMovementStateMachine.ReusableData.ShouldSprint = false;
         }
 
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
             
-            if(_playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero) return;
+            if(playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero) return;
             
             RotateTowardsTargetRotation();
         }
@@ -37,9 +37,9 @@ namespace GenshinImpactMovementSystem
         {
             base.OnAnimationTransitionEvent();
 
-            if (_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
+            if (playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.MediumStoppingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.MediumStoppingState);
                 
                 return;
             }

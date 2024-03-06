@@ -15,8 +15,11 @@ namespace GenshinImpactMovementSystem
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
+            
+            SetBaseCameraRecenteringData();
+            
             base.Enter();
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
         }
 
         public override void PhysicsUpdate()
@@ -32,7 +35,7 @@ namespace GenshinImpactMovementSystem
 
         public override void OnAnimationTransitionEvent()
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.IdlingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.IdlingState);
         }
 
         #endregion
@@ -42,22 +45,18 @@ namespace GenshinImpactMovementSystem
         protected override void AddInputActionCallbacks()
         {
             base.AddInputActionCallbacks();
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started += OnMovementStarted;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started += OnMovementStarted;
         }
 
         protected override void RemoveInputActionCallbacks()
         {
             base.RemoveInputActionCallbacks();
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started -= OnMovementStarted;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started -= OnMovementStarted;
         }
 
         #endregion
 
         #region Input Methods
-
-        protected override void OnMovementCanceled(InputAction.CallbackContext context)
-        {
-        }
         
         private void OnMovementStarted(InputAction.CallbackContext context)
         {

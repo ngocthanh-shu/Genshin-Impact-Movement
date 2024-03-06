@@ -12,7 +12,7 @@ namespace GenshinImpactMovementSystem
         private Vector3 _playerPositionOnEnter;
         public PlayerFallingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _playerFallData = _playerAirborneData.FallData;
+            _playerFallData = playerAirborneData.FallData;
         }
 
         #region IState Methods
@@ -21,9 +21,9 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
             
-            _playerPositionOnEnter = _playerMovementStateMachine.Player.transform.position;
+            _playerPositionOnEnter = playerMovementStateMachine.Player.transform.position;
 
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
             
             ResetVerticalVelocity();
         }
@@ -48,23 +48,23 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnContactWithGround(Collider colliders)
         {
-            float fallDistance = Math.Abs(_playerPositionOnEnter.y - _playerMovementStateMachine.Player.transform.position.y);
+            float fallDistance = Math.Abs(_playerPositionOnEnter.y - playerMovementStateMachine.Player.transform.position.y);
 
             if (fallDistance < _playerFallData.MinimumDistanceToConsideredHardFall)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.LightLandingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.LightLandingState);
                 
                 return;
             }
             
-            if(_playerMovementStateMachine.ReusableData.ShouldWalk && !_playerMovementStateMachine.ReusableData.ShouldSprint || _playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
+            if(playerMovementStateMachine.ReusableData.ShouldWalk && !playerMovementStateMachine.ReusableData.ShouldSprint || playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.HardLandingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.HardLandingState);
                 
                 return;
             }
             
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.RollingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.RollingState);
         }
 
         #endregion
@@ -78,7 +78,7 @@ namespace GenshinImpactMovementSystem
             
             Vector3 limitedVelocity = new Vector3(0f, -_playerFallData.FallSpeedLimit - playerVerticalVelocity.y, 0f);
             
-            _playerMovementStateMachine.Player.Rigidbody.AddForce(limitedVelocity, ForceMode.VelocityChange);
+            playerMovementStateMachine.Player.Rigidbody.AddForce(limitedVelocity, ForceMode.VelocityChange);
         }
 
         #endregion

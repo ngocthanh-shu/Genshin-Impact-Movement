@@ -11,17 +11,18 @@ namespace GenshinImpactMovementSystem
         private PlayerSprintData _playerSprintData;
         public PlayerRunningState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
-            _playerSprintData = _playerGroundedData.SprintData;
+            _playerSprintData = playerGroundedData.SprintData;
         }
 
         #region IState Methods
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = playerGroundedData.RunData.SpeedModifier;
+            
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerGroundedData.RunData.SpeedModifier;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.MediumForce;
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.MediumForce;
             
             _startTime = Time.time;
         }
@@ -29,7 +30,7 @@ namespace GenshinImpactMovementSystem
         public override void Update()
         {
             base.Update();
-            if(!_playerMovementStateMachine.ReusableData.ShouldWalk) return;
+            if(!playerMovementStateMachine.ReusableData.ShouldWalk) return;
             if(_startTime < Time.time + _playerSprintData.RunToWalkTime) return;
             StopRunning();
         }
@@ -40,12 +41,12 @@ namespace GenshinImpactMovementSystem
         
         private void StopRunning()
         {
-            if(_playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
+            if(playerMovementStateMachine.ReusableData.MovementInput == Vector2.zero)
             {
-                _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.IdlingState);
+                playerMovementStateMachine.ChangeState(playerMovementStateMachine.IdlingState);
                 return;
             }
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.WalkingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.WalkingState);
         }
         
         #endregion
@@ -54,14 +55,16 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.MediumStoppingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.MediumStoppingState);
+            
+            base.OnMovementCanceled(context);
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
             base.OnWalkToggleStarted(context);
             
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.WalkingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.WalkingState);
         }
 
         #endregion

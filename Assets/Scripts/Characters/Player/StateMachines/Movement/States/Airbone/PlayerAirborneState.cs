@@ -24,12 +24,12 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnContactWithGround(Collider colliders)
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.LightLandingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.LightLandingState);
         }
 
         protected virtual void ResetSprintState()
         {
-            _playerMovementStateMachine.ReusableData.ShouldSprint = false;
+            playerMovementStateMachine.ReusableData.ShouldSprint = false;
         }
 
         #endregion

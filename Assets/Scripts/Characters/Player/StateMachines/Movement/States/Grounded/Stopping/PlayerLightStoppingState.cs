@@ -16,8 +16,8 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementDecelerationForce = _playerGroundedData.StopData.LightDecelerationForce;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.WeakForce;
+            playerMovementStateMachine.ReusableData.MovementDecelerationForce = playerGroundedData.StopData.LightDecelerationForce;
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.WeakForce;
         }
 
         #endregion

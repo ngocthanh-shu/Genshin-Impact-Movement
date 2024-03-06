@@ -7,18 +7,31 @@ namespace GenshinImpactMovementSystem
 {
     public class PlayerWalkingState : PlayerMovingState
     {
+        private PlayerWalkData _playerWalkData;
+        
         public PlayerWalkingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
+            _playerWalkData = playerGroundedData.WalkData;
         }
 
         #region IState Methods
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = playerGroundedData.WalkData.SpeedModifier;
+            
+            playerMovementStateMachine.ReusableData.BackwardsCameraRecenteringData = _playerWalkData.BackwardsCameraRecenteringData;
+            
             base.Enter();
             
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerGroundedData.WalkData.SpeedModifier;
-            _playerMovementStateMachine.ReusableData.CurrentJumpForce = _playerAirborneData.JumpData.WeakForce;
+            playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.WeakForce;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            SetBaseCameraRecenteringData();
         }
 
         #endregion
@@ -27,14 +40,16 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnMovementCanceled(InputAction.CallbackContext context)
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.LightStoppingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.LightStoppingState);
+            
+            base.OnMovementCanceled(context);
         }
 
         protected override void OnWalkToggleStarted(InputAction.CallbackContext context)
         {
             base.OnWalkToggleStarted(context);
             
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.RunningState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.RunningState);
         }
 
         #endregion

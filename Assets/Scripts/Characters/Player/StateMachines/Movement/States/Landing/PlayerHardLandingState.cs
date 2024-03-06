@@ -15,11 +15,12 @@ namespace GenshinImpactMovementSystem
 
         public override void Enter()
         {
+            playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
+            
             base.Enter();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Disable();
-            _playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
-            
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Disable();
+
             ResetVelocity();
         }
 
@@ -27,19 +28,19 @@ namespace GenshinImpactMovementSystem
         {
             base.Exit();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Enable();
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Enable();
         }
 
         public override void OnAnimationTransitionEvent()
         {
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.IdlingState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.IdlingState);
         }
 
         public override void OnAnimationExitEvent()
         {
             base.OnAnimationExitEvent();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Enable();
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Enable();
         }
 
         #endregion
@@ -50,7 +51,7 @@ namespace GenshinImpactMovementSystem
         {
             base.AddInputActionCallbacks();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started += OnMovementStarted;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started += OnMovementStarted;
         }
         
 
@@ -58,14 +59,14 @@ namespace GenshinImpactMovementSystem
         {
             base.RemoveInputActionCallbacks();
             
-            _playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started -= OnMovementStarted;
+            playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.started -= OnMovementStarted;
         }
 
         protected override void OnMove()
         {
-            if(_playerMovementStateMachine.ReusableData.ShouldWalk) return;
+            if(playerMovementStateMachine.ReusableData.ShouldWalk) return;
             
-            _playerMovementStateMachine.ChangeState(_playerMovementStateMachine.RunningState);
+            playerMovementStateMachine.ChangeState(playerMovementStateMachine.RunningState);
         }
 
         #endregion

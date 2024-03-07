@@ -42,7 +42,7 @@ namespace GenshinImpactMovementSystem
             Vector3 groundColliderCenterInWorldSpace = groundCheckCollider.bounds.center;
             
             Collider[] overlapGroundColliders = Physics.OverlapBox(groundColliderCenterInWorldSpace, 
-                groundCheckCollider.bounds.extents, groundCheckCollider.transform.rotation, 
+                playerMovementStateMachine.Player.CapsuleColliderUtility.PlayerTriggerColliderData.GroundCheckColliderExtents, groundCheckCollider.transform.rotation, 
                 playerMovementStateMachine.Player.LayerData.GroundLayerMask, 
                 QueryTriggerInteraction.Ignore);
             

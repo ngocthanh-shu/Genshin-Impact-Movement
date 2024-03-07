@@ -186,13 +186,18 @@ namespace GenshinImpactMovementSystem
             playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.canceled -= OnMovementCanceled;
         }
         
-        protected float GetMovementSpeed()
+        protected float GetMovementSpeed(bool shouldConsiderSlopes = true)
         {
             //Debug.Log(_playerMovementStateMachine.ReusableData.MovementOnSlopesSpeedModifier);
             
-            return playerGroundedData.BaseSpeed 
-                   * playerMovementStateMachine.ReusableData.MovementSpeedModifier 
-                   * playerMovementStateMachine.ReusableData.MovementOnSlopesSpeedModifier;
+            float movementSpeed = playerGroundedData.BaseSpeed * playerMovementStateMachine.ReusableData.MovementSpeedModifier;
+
+            if (shouldConsiderSlopes)
+            {
+                movementSpeed *= playerMovementStateMachine.ReusableData.MovementOnSlopesSpeedModifier;
+            }
+            
+            return movementSpeed;
         }
         
         protected Vector3 GetPlayerHorizontalVelocity()

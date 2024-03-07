@@ -23,7 +23,14 @@ namespace GenshinImpactMovementSystem
 
             ResetVelocity();
         }
-
+        
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+            if(!IsMovingHorizontally()) return;
+            ResetVelocity();
+        }
+        
         public override void Exit()
         {
             base.Exit();

@@ -48,7 +48,7 @@ namespace GenshinImpactMovementSystem
 
         protected override void OnContactWithGround(Collider colliders)
         {
-            float fallDistance = Math.Abs(_playerPositionOnEnter.y - playerMovementStateMachine.Player.transform.position.y);
+            float fallDistance = _playerPositionOnEnter.y - playerMovementStateMachine.Player.transform.position.y;
 
             if (fallDistance < _playerFallData.MinimumDistanceToConsideredHardFall)
             {

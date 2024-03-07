@@ -80,6 +80,8 @@ namespace GenshinImpactMovementSystem
 
             if (_shouldKeepRotating)
             {
+                UpdateTargetRotation(GetMovementInputDirection());
+                
                 jumpDirection =
                     GetTargetRotationDirection(playerMovementStateMachine.ReusableData.CurrentTargetRotation.y);
             }

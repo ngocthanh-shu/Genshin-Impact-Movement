@@ -36,7 +36,7 @@ namespace GenshinImpactMovementSystem
             playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerDashData.SpeedModifier;
             base.Enter();
             playerMovementStateMachine.ReusableData.RotationData = _playerDashData.RotationData;
-            AddForceOnTransitionFromStationaryState();
+            Dash();
             _shouldKeepRotating = playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
             UpdateConsecutiveDashes();
             _startDashTime = Time.time;
@@ -70,13 +70,21 @@ namespace GenshinImpactMovementSystem
         
         #region Main Methods
         
-        private void AddForceOnTransitionFromStationaryState()
+        private void Dash()
         {
-            if(playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero) return;
-            Vector3 characterRotationDirection = playerMovementStateMachine.Player.transform.forward;
-            characterRotationDirection.y = 0f;
-            UpdateTargetRotation(characterRotationDirection, false);
-            playerMovementStateMachine.Player.Rigidbody.velocity = characterRotationDirection * GetMovementSpeed();
+            Vector3 dashDirection = playerMovementStateMachine.Player.transform.forward;
+            dashDirection.y = 0f;
+            UpdateTargetRotation(dashDirection, false);
+
+            if (playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero)
+            {
+                UpdateTargetRotation(GetMovementInputDirection());
+
+                dashDirection =
+                    GetTargetRotationDirection(playerMovementStateMachine.ReusableData.CurrentTargetRotation.y);
+            }
+
+            playerMovementStateMachine.Player.Rigidbody.velocity = dashDirection * GetMovementSpeed(false);
         }
         
         private void UpdateConsecutiveDashes()

@@ -19,6 +19,8 @@ namespace GenshinImpactMovementSystem
             
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.HardLandParameterHash);
+            
             playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Disable();
 
             ResetVelocity();
@@ -34,6 +36,8 @@ namespace GenshinImpactMovementSystem
         public override void Exit()
         {
             base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.HardLandParameterHash);
             
             playerMovementStateMachine.Player.PlayerInput.PlayerActions.Movement.Enable();
         }

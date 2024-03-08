@@ -21,7 +21,16 @@ namespace GenshinImpactMovementSystem
             
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.RollParameterHash);
+            
             playerMovementStateMachine.ReusableData.ShouldSprint = false;
+        }
+        
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.RollParameterHash);
         }
 
         public override void PhysicsUpdate()

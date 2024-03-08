@@ -19,11 +19,20 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.GroundedParameterHash);
+            
             UpdateShouldSprintState();
             
             UpdateCameraCenteringState(playerMovementStateMachine.ReusableData.MovementInput);
         }
-        
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.GroundedParameterHash);
+        }
+
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();

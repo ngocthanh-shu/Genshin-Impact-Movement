@@ -10,6 +10,23 @@ namespace GenshinImpactMovementSystem
         {
         }
         
+        #region IState Methods
+        
+public override void Enter()
+        {
+            base.Enter();
+            
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.MovingParameterHash);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.MovingParameterHash);
+        }
+        
+        #endregion
         
     }
 }

@@ -25,6 +25,8 @@ namespace GenshinImpactMovementSystem
             
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.SprintParameterHash);
+            
             playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StrongForce;
             
             _shouldResetSprintState = true;
@@ -43,6 +45,8 @@ namespace GenshinImpactMovementSystem
         public override void Exit()
         {
             base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.SprintParameterHash);
 
             if (_shouldResetSprintState)
             {

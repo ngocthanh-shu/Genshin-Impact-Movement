@@ -21,11 +21,20 @@ namespace GenshinImpactMovementSystem
         {
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.FallParameterHash);
+            
             _playerPositionOnEnter = playerMovementStateMachine.Player.transform.position;
 
             playerMovementStateMachine.ReusableData.MovementSpeedModifier = 0f;
             
             ResetVerticalVelocity();
+        }
+        
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.FallParameterHash);
         }
 
         public override void PhysicsUpdate()

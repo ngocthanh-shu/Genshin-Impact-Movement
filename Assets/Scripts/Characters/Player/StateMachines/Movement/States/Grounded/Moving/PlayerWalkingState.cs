@@ -24,12 +24,16 @@ namespace GenshinImpactMovementSystem
             
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.WalkParameterHash);
+            
             playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.WeakForce;
         }
 
         public override void Exit()
         {
             base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.WalkParameterHash);
             
             SetBaseCameraRecenteringData();
         }

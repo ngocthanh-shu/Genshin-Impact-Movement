@@ -22,9 +22,18 @@ namespace GenshinImpactMovementSystem
             
             base.Enter();
             
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.RunParameterHash);
+            
             playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.MediumForce;
             
             _startTime = Time.time;
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.RunParameterHash);
         }
 
         public override void Update()

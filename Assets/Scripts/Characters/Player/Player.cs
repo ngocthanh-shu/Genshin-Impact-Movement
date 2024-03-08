@@ -21,7 +21,11 @@ namespace GenshinImpactMovementSystem
         [field: Header("Cameras")]
         [field:SerializeField] public PlayerCameraUtility CameraUtility { get; private set; }
         
+        [field:Header("Animations")]
+        [field: SerializeField] public PlayerAnimationData AnimationData { get; private set; }
+        
         public Rigidbody Rigidbody { get; private set; }
+        public Animator Animator { get; private set; }
         public Transform CameraTransform { get; private set; }
         
         public PlayerInput PlayerInput { get; private set; }
@@ -29,6 +33,7 @@ namespace GenshinImpactMovementSystem
         private void Awake()
         {
             Rigidbody = GetComponent<Rigidbody>();
+            Animator = GetComponentInChildren<Animator>();
             
             if (Camera.main != null) CameraTransform = Camera.main.transform;
 
@@ -40,6 +45,8 @@ namespace GenshinImpactMovementSystem
             CapsuleColliderUtility.CalculateCapsuleColliderDimensions();
             
             CameraUtility.Initialize();
+            
+            AnimationData.Initialize();
         }
 
         private void OnValidate()
@@ -72,6 +79,21 @@ namespace GenshinImpactMovementSystem
         private void FixedUpdate()
         {
             _movementStateMachine.PhysicsUpdate();
+        }
+
+        public void OnMovementStateAnimationEnterEvent()
+        {
+            _movementStateMachine.OnAnimationEnterEvent();
+        }
+        
+        public void OnMovementStateAnimationExitEvent()
+        {
+            _movementStateMachine.OnAnimationExitEvent();
+        }
+        
+        public void OnMovementStateAnimationTransitionEvent()
+        {
+            _movementStateMachine.OnAnimationTransitionEvent();
         }
     }
 }

@@ -156,6 +156,16 @@ namespace GenshinImpactMovementSystem
         #endregion
         
         #region Reusable Methods
+
+        protected void StartAnimation(int animationHash)
+        {
+            playerMovementStateMachine.Player.Animator.SetBool(animationHash, true);
+        }
+        
+        protected void StopAnimation(int animationHash)
+        {
+            playerMovementStateMachine.Player.Animator.SetBool(animationHash, false);
+        }
         
         protected void SetBaseCameraRecenteringData()
         {

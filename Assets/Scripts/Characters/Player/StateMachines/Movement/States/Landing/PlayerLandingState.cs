@@ -10,6 +10,24 @@ namespace GenshinImpactMovementSystem
         public PlayerLandingState(PlayerMovementStateMachine playerMovementStateMachine) : base(playerMovementStateMachine)
         {
         }
+        
+        #region IState Methods
+        
+        public override void Enter()
+        {
+            base.Enter();
+            
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.LandingParameterHash);
+        }
+        
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.LandingParameterHash);
+        }
+        
+        #endregion
 
     }
 }

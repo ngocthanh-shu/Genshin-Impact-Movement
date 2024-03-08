@@ -35,6 +35,7 @@ namespace GenshinImpactMovementSystem
         {
             playerMovementStateMachine.ReusableData.MovementSpeedModifier = _playerDashData.SpeedModifier;
             base.Enter();
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.DashParameterHash);
             playerMovementStateMachine.ReusableData.RotationData = _playerDashData.RotationData;
             Dash();
             _shouldKeepRotating = playerMovementStateMachine.ReusableData.MovementInput != Vector2.zero;
@@ -52,6 +53,7 @@ namespace GenshinImpactMovementSystem
         public override void Exit()
         {
             base.Exit();
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.DashParameterHash);
             SetBaseRotationData();
         }
 

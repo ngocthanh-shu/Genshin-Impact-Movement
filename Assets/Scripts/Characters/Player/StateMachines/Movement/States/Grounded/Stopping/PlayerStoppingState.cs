@@ -20,6 +20,15 @@ namespace GenshinImpactMovementSystem
             SetBaseCameraRecenteringData();
             
             base.Enter();
+            
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.StoppingParameterHash);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.StoppingParameterHash);
         }
 
         public override void PhysicsUpdate()

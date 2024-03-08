@@ -23,10 +23,19 @@ namespace GenshinImpactMovementSystem
             playerMovementStateMachine.ReusableData.BackwardsCameraRecenteringData = _playerIdleData.BackwardsCameraRecenteringData;
             
             base.Enter();
+            
+            StartAnimation(playerMovementStateMachine.Player.AnimationData.IdleParameterHash);
 
             playerMovementStateMachine.ReusableData.CurrentJumpForce = playerAirborneData.JumpData.StationaryForce;
             
             ResetVelocity();
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+            
+            StopAnimation(playerMovementStateMachine.Player.AnimationData.IdleParameterHash);
         }
 
         public override void Update()
